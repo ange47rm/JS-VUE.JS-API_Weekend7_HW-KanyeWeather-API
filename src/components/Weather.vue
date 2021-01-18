@@ -13,7 +13,6 @@
         <h3 v-if='infoFromAPI'>Max temperature: {{ infoFromAPI.main.temp_max }}°C</h3>
         <h3 v-if='infoFromAPI'>Min temperature: {{ infoFromAPI.main.temp_min }}°C</h3>
         <h3 v-if='infoFromAPI'>Humidity: {{ infoFromAPI.main.humidity }}% </h3>
-        <button v-on:click='getIcon(infoFromAPI)'>Get Icon</button>
 
       
   </div>
@@ -36,19 +35,13 @@ export default {
     },
     props: ['city'],
     methods: {
-        getWeather(cityInput){
-            fetch (`https://api.openweathermap.org/data/2.5/weather?q=${cityInput}&appid=${APIkey}&units=metric`)
+        async getWeather(cityInput) {
+            await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityInput}&appid=${APIkey}&units=metric`)
             .then (response => response.json())
             .then (weatherInfoForCity => this.infoFromAPI = weatherInfoForCity)
-
-        },
-        async getWeather(cityInput) {
-        await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityInput}&appid=${APIkey}&units=metric`)
-        .then (response => response.json())
-        .then (weatherInfoForCity => this.infoFromAPI = weatherInfoForCity)
-        this.weatherIcon = this.infoFromAPI.weather[0].icon;                        // wait for line 46 fetch PROMISE before executing this
-        this.iconURL = `http://openweathermap.org/img/w/${this.weatherIcon}.png`;
-        },
+            this.weatherIcon = this.infoFromAPI.weather[0].icon;                        // wait for line 46 fetch PROMISE before executing this
+            this.iconURL = `http://openweathermap.org/img/w/${this.weatherIcon}.png`;
+            },
     }
 }
 
